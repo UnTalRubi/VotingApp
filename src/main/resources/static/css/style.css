@@ -1,0 +1,50 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    font-size: 5em;
+}
+
+.image-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.image-item {
+    text-align: center;
+}
+
+.image-item img {
+    width: 400px;
+    height: 400px;
+    object-fit: cover;
+    border: 5px solid #000000;
+}
+
+.vote-count {
+    margin-top: 10px;
+    font-size: 3em;
+}
+
+.image-item form button {
+    border: none;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.image-item img:hover {
+    opacity: 0.9;
+}
