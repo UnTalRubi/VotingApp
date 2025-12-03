@@ -8,6 +8,10 @@
 <body>
 <h1>GOTY Of The Year Del Año</h1>
 
+<div class="email">
+
+</div>
+
 <div class="image-container">
     <div class="image-item" th:each="image : ${images}">
         <form th:action="@{/vote/{id}(id=${image.id})}" method="post">

@@ -1,8 +1,11 @@
 package edu.teis.votingapp.service;
 
 import edu.teis.votingapp.dto.ImageVoteDto;
+import edu.teis.votingapp.dto.UserDto;
 import edu.teis.votingapp.entity.ImageVote;
+import edu.teis.votingapp.entity.User;
 import edu.teis.votingapp.repository.ImageVoteRepository;
+import edu.teis.votingapp.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +19,8 @@ public class VotingService {
 
     @Autowired
     private ImageVoteRepository imageVoteRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @PostConstruct
     public void initDatabase() {
@@ -32,19 +37,22 @@ public class VotingService {
 
     public List<ImageVoteDto> getAllImages() {
         return imageVoteRepository.findAll().stream()
-                .map(this::convertToDto)
+                .map(this::convertImageToDto)
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public void voteForImage(Long imageId) {
+    public void voteForImage(Long imageId, String email) {
         ImageVote image = imageVoteRepository.findById(imageId)
                 .orElseThrow(() -> new RuntimeException("Imagen no encontrada"));
         image.incrementVotes();
-        imageVoteRepository.save(image);
+
+        User user = userRepository.findUserByEmail(email);
+        if (user)
+            imageVoteRepository.save(image);
     }
 
-    private ImageVoteDto convertToDto(ImageVote image) {
+    private ImageVoteDto convertImageToDto(ImageVote image) {
         return new ImageVoteDto(
                 image.getId(),
                 image.getName(),

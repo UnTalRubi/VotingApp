@@ -22,9 +22,9 @@ public class VotingController {
         return "index";
     }
 
-    @PostMapping("/vote/{id}")
-    public String voteForImage(@PathVariable Long id) {
-        votingService.voteForImage(id);
+    @PostMapping("/vote/{id}/user/{email}")
+    public String voteForImage(@PathVariable Long id, @PathVariable String email) {
+        votingService.voteForImage(id, email);
         return "redirect:/";
     }
 }
