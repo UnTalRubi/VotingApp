@@ -3,7 +3,7 @@ package edu.teis.votingapp.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "votes")
+@Table(name = "voting_options")
 public class ImageVote {
 
     @Id

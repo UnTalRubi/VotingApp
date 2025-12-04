@@ -1,11 +1,10 @@
 package edu.teis.votingapp.service;
 
 import edu.teis.votingapp.dto.ImageVoteDto;
-import edu.teis.votingapp.dto.UserDto;
 import edu.teis.votingapp.entity.ImageVote;
-import edu.teis.votingapp.entity.User;
+import edu.teis.votingapp.entity.UserVote;
 import edu.teis.votingapp.repository.ImageVoteRepository;
-import edu.teis.votingapp.repository.UserRepository;
+import edu.teis.votingapp.repository.UserVoteRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,7 @@ public class VotingService {
     @Autowired
     private ImageVoteRepository imageVoteRepository;
     @Autowired
-    private UserRepository userRepository;
+    private UserVoteRepository userVoteRepository;
 
     @PostConstruct
     public void initDatabase() {
@@ -37,22 +36,27 @@ public class VotingService {
 
     public List<ImageVoteDto> getAllImages() {
         return imageVoteRepository.findAll().stream()
-                .map(this::convertImageToDto)
+                .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
     @Transactional
     public void voteForImage(Long imageId, String email) {
+        if (userVoteRepository.existsByEmail(email)) {
+            return;
+        }
+
         ImageVote image = imageVoteRepository.findById(imageId)
                 .orElseThrow(() -> new RuntimeException("Imagen no encontrada"));
-        image.incrementVotes();
 
-        User user = userRepository.findUserByEmail(email);
-        if (user)
-            imageVoteRepository.save(image);
+        UserVote userVote = new UserVote(email, image);
+        userVoteRepository.save(userVote);
+
+        image.incrementVotes();
+        imageVoteRepository.save(image);
     }
 
-    private ImageVoteDto convertImageToDto(ImageVote image) {
+    private ImageVoteDto convertToDto(ImageVote image) {
         return new ImageVoteDto(
                 image.getId(),
                 image.getName(),

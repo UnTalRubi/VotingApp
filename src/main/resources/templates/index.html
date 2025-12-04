@@ -8,23 +8,28 @@
 <body>
 <h1>GOTY Of The Year Del Año</h1>
 
-<div class="email">
+<form th:action="@{/vote}" method="post">
 
-</div>
-
-<div class="image-container">
-    <div class="image-item" th:each="image : ${images}">
-        <form th:action="@{/vote/{id}(id=${image.id})}" method="post">
-            <button type="submit" style="border: none; background: none; padding: 0; cursor: pointer;">
-                <img th:src="@{${image.imagePath}}"
-                     th:alt="${image.name}">
-            </button>
-        </form>
-        <div class="vote-count">
-            <span class="heart">❤</span>
-            <span th:text="${image.votes}"></span>
+    <div class="images">
+        <div class="image-item" th:each="image : ${images}">
+            <img th:src="@{${image.imagePath}}" th:alt="${image.name}">
+            <div>❤ <span th:text="${image.votes}"></span></div>
+            <div style="align-items: center;">
+                <input class="radio-button" type="radio" th:value="${image.id}" name="imageId" required>
+                <label th:text="${image.name}"></label>
+            </div>
         </div>
     </div>
-</div>
+
+    <div class="form-email">
+        <div>
+            <label>Email:</label><br>
+            <input type="email" name="email" required style="width: 300px; padding: 5px;">
+        </div>
+        <div class="form-button">
+            <button type="submit">Votar</button>
+        </div>
+    </div>
+</form>
 </body>
 </html>
